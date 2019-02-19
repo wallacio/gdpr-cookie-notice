@@ -1,1 +1,30 @@
 @import "gdpr-cookie-notice";
+
+
+.gdpr-cookie-notice-reminder-XXXXX {
+    position: fixed;
+    background: $bar_bg;
+    left: 0;
+    bottom: 0;
+    width: auto;
+
+    &-title {
+        margin: 0;
+        padding: 10px;
+        color: $bar_text;
+        font-size: 0.8rem;
+        line-height: 1rem;
+        text-align: left;
+
+        @media (max-width: 768px) {
+          padding: 0;
+          margin: 10px;
+          font-size: 0.8rem;
+          line-height: 1rem;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}

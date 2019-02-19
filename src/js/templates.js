@@ -1,4 +1,4 @@
-//HEAD 
+//HEAD
 window["gdpr-cookie-notice-templates"] = {};
 
 window["gdpr-cookie-notice-templates"]["bar.html"] = "<div class=\"gdpr-cookie-notice\">\n" +
@@ -18,7 +18,7 @@ window["gdpr-cookie-notice-templates"]["category.html"] = "<li class=\"gdpr-cook
     "  </div>\n" +
     "  <p class=\"gdpr-cookie-notice-modal-cookie-info\">{desc}</p>\n" +
     "</li>\n" +
-    ""; 
+    "";
 
 window["gdpr-cookie-notice-templates"]["modal.html"] = "<div class=\"gdpr-cookie-notice-modal\">\n" +
     "  <div class=\"gdpr-cookie-notice-modal-content\">\n" +
@@ -33,5 +33,10 @@ window["gdpr-cookie-notice-templates"]["modal.html"] = "<div class=\"gdpr-cookie
     "    </div>\n" +
     "  </div>\n" +
     "</div>\n" +
-    ""; 
-// END 
+    "";
+
+window["gdpr-cookie-notice-templates"]["reminder.html"] = "<div class=\"gdpr-cookie-notice-reminder\">\n" +
+    "  <p class=\"gdpr-cookie-notice-reminder-title\">{reminder}</p>\n" +
+    "</div>\n" +
+    "";
+// END

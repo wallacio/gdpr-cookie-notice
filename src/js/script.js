@@ -2,12 +2,14 @@
 var gdprCookieNoticeLocales = {};
 
 function gdprCookieNotice(config) {
+
   var namespace = 'gdprcookienotice';
   var pluginPrefix = 'gdpr-cookie-notice';
   var templates = window[pluginPrefix+'-templates'];
   var gdprCookies = Cookies.noConflict();
   var modalLoaded = false;
   var noticeLoaded = false;
+  var reminderLoaded = false;
   var cookiesAccepted = false;
   var categories = ['performance', 'analytics', 'marketing'];
 
@@ -23,14 +25,17 @@ function gdprCookieNotice(config) {
 
   // Show cookie bar if needed
   if(!currentCookieSelection) {
+      // console.log("No cookie, showing bar notice");
     showNotice();
-
     // Accept cookies on page scroll
     if(config.implicit) {
       acceptOnScroll();
     }
   } else {
     deleteCookies(currentCookieSelection);
+    // hideNotice();
+    // console.log("Showing reminder from if currentCookieSelection")
+    // showReminder();
     document.dispatchEvent(cookiesAcceptedEvent);
   }
 
@@ -52,11 +57,11 @@ function gdprCookieNotice(config) {
     }
 
     // Show the notice if not all categories are enabled
-    if(notAllEnabled) {
-      showNotice();
-    } else {
-      hideNotice();
-    }
+    // if(notAllEnabled) {
+    //   showNotice();
+    // } else {
+    //   hideNotice();
+    // }
   }
 
   // Hide cookie notice bar
@@ -86,7 +91,8 @@ function gdprCookieNotice(config) {
     // Load marketing scripts that only works when cookies are accepted
     cookiesAcceptedEvent = new CustomEvent('gdprCookiesEnabled', {detail: value});
     document.dispatchEvent(cookiesAcceptedEvent);
-
+    hideNotice();
+    // showReminder();
   }
 
   // Show the cookie bar
@@ -94,7 +100,6 @@ function gdprCookieNotice(config) {
     if(noticeLoaded) {
       return false;
     }
-
     var noticeHtml = localizeTemplate('bar.html');
     document.body.insertAdjacentHTML('beforeend', noticeHtml);
 
@@ -105,13 +110,38 @@ function gdprCookieNotice(config) {
     noticeLoaded = true;
   }
 
+  // Show the cookie tab
+  function buildReminder() {
+    if(reminderLoaded) {
+      return false;
+    }
+
+    var reminderHtml = localizeTemplate('reminder.html');
+    document.body.insertAdjacentHTML('beforeend', reminderHtml);
+
+    // Load click functions
+    setNoticeEventListeners();
+
+    // Make sure its only loaded once
+    reminderLoaded = true;
+  }
+
   // Show the cookie notice
   function showNotice() {
     buildNotice();
-
     // Show the notice with a little timeout
     setTimeout(function(){
       document.documentElement.classList.add(pluginPrefix+'-loaded');
+    }, config.timeout);
+  }
+
+  // Show the cookie notice
+  function showReminder() {
+    buildReminder();
+
+    // Show the notice with a little timeout
+    setTimeout(function(){
+      document.documentElement.classList.add(pluginPrefix+'-reminder-loaded');
     }, config.timeout);
   }
 
@@ -205,18 +235,37 @@ function gdprCookieNotice(config) {
 
   // Click functions in the notice
   function setNoticeEventListeners() {
-    var settingsButton = document.querySelectorAll('.'+pluginPrefix+'-nav-item-settings')[0];
-    var acceptButton = document.querySelectorAll('.'+pluginPrefix+'-nav-item-accept')[0];
+    document.addEventListener('click', function (event) {
+        if (event.target.matches('.'+pluginPrefix+'-reminder')) {
+            event.preventDefault();
+    		showModal();
+    	}
 
-    settingsButton.addEventListener('click', function(e) {
-      e.preventDefault();
-      showModal();
-    });
+    	if (event.target.matches('.'+pluginPrefix+'-nav-item-settings')) {
+            event.preventDefault();
+    		showModal();
+    	}
 
-    acceptButton.addEventListener('click', function(e) {
-      e.preventDefault();
-      acceptCookies();
-    });
+        if (event.target.matches('.'+pluginPrefix+'-nav-item-accept')) {
+            event.preventDefault();
+    		acceptCookies();
+    	}
+
+    }, false);
+
+    // var settingsButton = document.querySelectorAll('.'+pluginPrefix+'-nav-item-settings')[0];
+    // var reminderButton = document.querySelectorAll('.'+pluginPrefix+'-reminder-title')[0];
+    // var acceptButton = document.querySelectorAll('.'+pluginPrefix+'-nav-item-accept')[0];
+
+    // settingsButton.addEventListener('click', function(e) {
+    //   e.preventDefault();
+    //   showModal();
+    // });
+
+    // acceptButton.addEventListener('click', function(e) {
+    //   e.preventDefault();
+    //   acceptCookies();
+    // });
 
   }
 

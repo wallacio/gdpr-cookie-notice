@@ -13,5 +13,6 @@ gdprCookieNoticeLocales.en = {
   cookie_analytics_title: 'Analytics cookies',
   cookie_analytics_desc: 'We use analytics cookies to help us measure how users interact with website content, which helps us customize our websites and application for you in order to enhance your experience.',
   cookie_marketing_title: 'Marketing cookies',
-  cookie_marketing_desc: 'These cookies are used to make advertising messages more relevant to you and your interests. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.'
+  cookie_marketing_desc: 'These cookies are used to make advertising messages more relevant to you and your interests. The intention is to display ads that are relevant and engaging for the individual user and thereby more valuable for publishers and third party advertisers.',
+  reminder: 'Cookie settings'
 }
