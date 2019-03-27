@@ -21,11 +21,14 @@ function gdprCookieNotice(config) {
 
   // Get the users current cookie selection
   var currentCookieSelection = getCookie();
+  // console.log(currentCookieSelection);
   var cookiesAcceptedEvent = new CustomEvent('gdprCookiesEnabled', {detail: currentCookieSelection});
+
+  setReminderEventListeners();
 
   // Show cookie bar if needed
   if(!currentCookieSelection) {
-      // console.log("No cookie, showing bar notice");
+    // console.log("No cookie, showing bar notice");
     showNotice();
     // Accept cookies on page scroll
     if(config.implicit) {
@@ -50,6 +53,7 @@ function gdprCookieNotice(config) {
     for (var i = 0; i < categories.length; i++) {
       if(config[categories[i]] && !savedCookies[categories[i]]) {
         for (var ii = 0; ii < config[categories[i]].length; ii++) {
+          // console.log("Removing cookie: " + config[categories[i]][ii]);
           gdprCookies.remove(config[categories[i]][ii]);
           notAllEnabled = true;
         }
@@ -85,8 +89,11 @@ function gdprCookieNotice(config) {
         value[categories[i]] = document.getElementById(pluginPrefix+'-cookie_'+categories[i]).checked;
       }
     }
+    // console.log("Setting cookie preferences");
     gdprCookies.set(namespace, value, { expires: config.expiration, domain: config.domain });
     deleteCookies(value);
+
+    // show what's left
 
     // Load marketing scripts that only works when cookies are accepted
     cookiesAcceptedEvent = new CustomEvent('gdprCookiesEnabled', {detail: value});
@@ -235,11 +242,8 @@ function gdprCookieNotice(config) {
 
   // Click functions in the notice
   function setNoticeEventListeners() {
+
     document.addEventListener('click', function (event) {
-        if (event.target.matches('.'+pluginPrefix+'-reminder')) {
-            event.preventDefault();
-    		showModal();
-    	}
 
     	if (event.target.matches('.'+pluginPrefix+'-nav-item-settings')) {
             event.preventDefault();
@@ -315,6 +319,15 @@ function gdprCookieNotice(config) {
     }
   }
 
+  function setReminderEventListeners() {
+    // console.log("Add el");
+    var cookiesLink = document.querySelectorAll('.'+pluginPrefix+'-reminder')[0];
+      cookiesLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showModal();
+      });
+
+  }
 
   // Get document height
   function getDocHeight() {
